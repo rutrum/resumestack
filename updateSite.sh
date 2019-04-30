@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # First run the html script and pipe its output to resume.js
-PYHTML="/home/rutrum/workdb/genHTMLresume.py"
+PYHTML="/home/rutrum/resumestack/genHTMLresume.py"
 JSDEST="/home/rutrum/site/script/resume.js"
 python3 $PYHTML > $JSDEST
 
 # Run the LATEX script and pipe output to temp
-PYLATEX="/home/rutrum/workdb/genLATEXresume.py"
+PYLATEX="/home/rutrum/resumestack/genLATEXresume.py"
 TEXDEST="/tmp/resume.tex"
 python3 $PYLATEX > $TEXDEST
 
 # Compile latex
 cd /tmp
 pdflatex $TEXDEST
-cp /tmp/resume.pdf /home/rutrum/site/resources/DavidPurdumResume.pdfs
+cp /tmp/resume.pdf /home/rutrum/site/resources/DavidPurdumResume.pdf
 
 # Now commit the changes and push to github
 SITEDIR="/home/rutrum/site"
