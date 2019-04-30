@@ -43,28 +43,21 @@ def write_title():
 def write_education(db):
     write_header("Education")
 
-
     edus = db.execute("SELECT * FROM Education").fetchall()
     for edu in edus:
-        # Replace commas with cdots
-        majors = re.sub(",", " $\\cdot$", edu["field"])
-        description = re.sub(",", " $\\cdot$", edu["description"])
-        print("""\\entry
-    {%s}
-	{\\textit{%s}}
-	{}
-	{
-		%s \\\\ 
-		%s \smallvspace \\\\
-		\\textit{%s}
-	}
-    """ % (
-        edu["institution"],
-        prettyDate(edu["end"]) + " Expected",
-        majors,
-        str(edu["gpa"]) + " GPA",
-        description
-    ))
+        write_degree(edu)
+
+def write_degree(edu):
+    majors = re.sub(",", " $\\cdot$", edu["field"])
+    description = re.sub(",", " $\\cdot$", edu["description"])
+    print("\\entry{%s}{\\textit{%s}}{}{%s \\\\ %s \smallvspace \\\\ \\textit{%s}}\n"
+        % (
+            edu["institution"],
+            prettyDate(edu["end"]) + " Expected",
+            majors,
+            str(edu["gpa"]) + " GPA",
+            description
+        ))
 
 def write_skills(db):
     write_header("Skills")
@@ -93,12 +86,8 @@ def write_skills(db):
             softstr += " $\\cdot$ %s" % soft["title"]
         i = (i + 1) % 3
     
-    print("""\\skillsentry
-	{%s}
-	{%s}
-    """ % (
-        langstr[2:], softstr[2:]
-    ))
+    print("\\skillsentry{%s}{%s}\n" 
+        % (langstr[2:], softstr[2:]) )
 
 def write_relavant_exp(db):
     write_header("Relavant Experience")
@@ -110,13 +99,8 @@ def write_projects(db):
     write_header("Projects")
     projs = db.execute("SELECT * FROM Projects").fetchall()
     for proj in projs:
-        print("""\\simpleentry
-	{%s}
-	{%s}
-    """ % (
-        proj["title"],
-        proj["description"]
-    ))
+        print("\\simpleentry{%s}{%s}\n" 
+            % (proj["title"], proj["description"]) )
 
 def write_other_exp(db):
     write_header("Other Experience")
@@ -127,23 +111,15 @@ def write_other_exp(db):
 def write_experience(exp):
     start = prettyDate(exp["start"])
     end = prettyDate(exp["end"])
-    exp["description"] = re.sub(" n ", " $n$ ", exp["description"])
+    description = re.sub(" n ", " $n$ ", exp["description"])
     if (end == ""):
         end = "Present"
     time = "{\\timeperiod{%s}{%s}}" % (start, end)
     if start == end:
         time = "{%s}" % start
-    print("""\\entry
-	{%s}
-	{%s}
-	{%s}
-	{%s}
-    """ % (
-        exp["title"],
-        exp["institution"],
-        time,
-        exp["description"]
-    ))
+
+    print("\\entry{%s}{%s}{%s}{%s}\n"
+        % (exp["title"], exp["institution"], time, description) )
     
 def main():
 
