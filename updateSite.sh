@@ -1,5 +1,10 @@
 #!/bin/bash
 
+COMMITMSG="Update resume."
+if [[ $# -eq 1 ]]; then
+    COMMITMSG="$1"
+fi
+
 # First run the html script and pipe its output to resume.js
 PYHTML="/home/rutrum/resumestack/genHTMLresume.py"
 JSDEST="/home/rutrum/site/script/resume.js"
@@ -18,5 +23,5 @@ cp /tmp/resume.pdf /home/rutrum/site/resources/DavidPurdumResume.pdf
 # Now commit the changes and push to github
 SITEDIR="/home/rutrum/site"
 git -C $SITEDIR add /home/rutrum/site
-git -C $SITEDIR commit -m "Update resume."
+git -C $SITEDIR commit -m "$COMMITMSG"
 git -C $SITEDIR push
