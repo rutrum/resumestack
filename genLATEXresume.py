@@ -17,11 +17,8 @@ def prettyDate(str):
 
 def write_preamble():
     print("\\documentclass{article}")
-    print()
     print("\\usepackage{/home/rutrum/Dropbox/resume/resumestyle}")
-    print()
     print("\\begin{document}")
-    print()
 
 def write_final():
     print("\\end{document}")
@@ -29,16 +26,16 @@ def write_final():
 def write_header(str):
     print("\header {" + str + "}\n")
 
-def write_title():
-    print("""\\bigtitle
-    {David Purdum}
-    {
-        purdum41@gmail.com \\\\
-        (317) 760\\,-\\,9416 \\\\
-        github.com/rutrum \\\\
-        linkedin.com/davidpurdum
-    }
-    """)
+def write_title(db):
+    me = db.execute("SELECT * FROM Persons WHERE name='David Purdum'").fetchone()
+
+    # Format number to add spacing
+    phone = me["cell"]
+    phone = re.sub("\)", ") ", phone)
+    phone = re.sub("-", "\\,-\\,", phone)
+
+    print("\\bigtitle{David Purdum}{%s \\\\ %s \\\\ %s \\\\ %s}\n"
+        % (me["email"], phone, me["github"], me["linkedin"]) )
 
 def write_education(db):
     write_header("Education")
@@ -127,7 +124,7 @@ def main():
     db.row_factory = dict_factory
 
     write_preamble()
-    write_title()
+    write_title(db)
 
     write_education(db)
     write_skills(db)
