@@ -27,11 +27,13 @@ def write_header(title):
 # Constructs an experience
 def write_experience(exp):
 
+    description = re.sub(" n ", " $n$ ", exp["description"])
+    
     start = prettyDate(exp["start"])
     end = prettyDate(exp["end"])
-    description = re.sub(" n ", " $n$ ", exp["description"])
     if (end == ""):
         end = "Present"
+        
     time = "{\\timeperiod{%s}{%s}}" % (start, end)
     if start == end:
         time = "{%s}" % start
@@ -112,8 +114,8 @@ def write_skills(db):
         % (langstr[2:], softstr[2:]) )
 
 # List of technical jobs and activities
-def write_relavant_exp(db):
-    write_header("Relavant Experience")
+def write_relevant_exp(db):
+    write_header("Relevant Experience")
     exps = db.execute("SELECT * FROM Experience WHERE tag <> 'other' ORDER BY start DESC").fetchall()
     for exp in exps:
         write_experience(exp)
@@ -151,7 +153,7 @@ def main():
 
     write_education(db)
     write_skills(db)
-    write_relavant_exp(db)
+    write_relevant_exp(db)
     write_projects(db)
     write_other_exp(db)
 

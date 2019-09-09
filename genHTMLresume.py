@@ -49,7 +49,7 @@ def main():
         softbuff += soft["title"] + ", "
     tag("p", softbuff[:-2])
 
-    tag("h2", "Relavant Experience")
+    tag("h2", "Relevant Experience")
     exps = db.execute("SELECT * FROM Experience WHERE tag <> 'other' ORDER BY start DESC").fetchall()
     for exp in exps:
         write_experience(exp)
