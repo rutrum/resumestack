@@ -77,7 +77,7 @@ def list_skills(skills, width):
 # Packages and begin document
 def write_preamble():
     print("\\documentclass{article}")
-    print("\\usepackage{/home/rutrum/Dropbox/resume/resumestyle}")
+    print("\\usepackage{/home/rutrum/repo/resumestack/src/resumestyle}")
     print("\\begin{document}")
 
 # Name and contact info

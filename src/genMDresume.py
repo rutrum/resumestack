@@ -43,6 +43,8 @@ def main():
     print("template = \"resume.html\"")
     print("+++")
     print()
+    print("You can view my resume below or look at the [pdf](/DavidPurdumResume.pdf) version.")
+    print()
 
     print("## Education")
     print()

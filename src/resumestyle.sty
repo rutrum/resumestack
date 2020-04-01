@@ -1,0 +1,74 @@
+\ProvidesPackage{resumestyle}[Style and macros for resume.]
+
+% Set page margins
+\usepackage[letterpaper, margin=3.5em]{geometry}
+
+% Font family
+\usepackage{palatino}
+
+% Remove page numbers
+\thispagestyle{empty}
+
+% Remove paragraph indentation
+\parindent=0pt
+
+% Format for a period of time
+\newcommand{\timeperiod}[2] {#1 \--- #2}
+
+% Definition for box widths
+\newcommand{\smallwidth} {12em}
+\newcommand{\midwidth}   {14em}
+\newcommand{\bigwidth}   {32em}
+
+% Definitions for horizonal alignment
+\newcommand{\leftalignment} {\hspace{19em}}
+\newcommand{\leftspace}     {\hspace{4em}}
+\newcommand{\middlespace}   {\hspace{2.8em}}
+
+% Definitions for vertical spacing
+\newcommand{\smallvspace}  {\vspace{1em}}
+\newcommand{\headervspace} {\vspace{.8em}}
+
+% Special title block
+\newcommand{\bigtitle}[2] {
+    \begin{center}
+        \parbox{15em}{\raggedleft{\LARGE\textbf{#1}}}
+        \hspace{5em}
+        \parbox{15em}{#2}
+    \end{center}
+    \smallvspace
+}
+
+% Large section header
+\newcommand{\header}[1] {
+    \leftalignment
+    \textbf{\Large #1}
+	\headervspace
+}
+
+% Entry
+\newcommand{\entry}[4] {
+    \leftspace
+    \parbox{\smallwidth}{\raggedleft{\textbf{#1} \\ #2}}
+	\middlespace
+    \parbox{\bigwidth}{\textit{#3} \\ #4}
+    \smallvspace
+}
+
+% Entry with less stuff
+\newcommand{\simpleentry}[2] {
+    \leftspace
+    \parbox{\smallwidth}{\raggedleft{\textbf{#1}}}
+	\middlespace
+    \parbox{\bigwidth}{#2}
+    \smallvspace
+}
+
+% Entry for two columns of skills
+\newcommand{\skillsentry}[2] {
+    \leftalignment
+    \parbox[t]{\midwidth}{#1}
+    \middlespace
+    \parbox[t]{\midwidth}{#2}
+    \smallvspace
+}
