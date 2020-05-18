@@ -44,8 +44,9 @@ def write_experience(exp):
 # Constuctions an education
 def write_degree(edu):
 
-    majors = re.sub(",", " $\\cdot$", edu["field"])
-    description = re.sub(",", " $\\cdot$", edu["description"])
+    # majors = re.sub(",", r" $\cdot$", edu["field"])
+    majors = edu["field"].replace(",", r" $\cdot$")
+    description = edu["description"].replace(",", r" $\cdot$")
 
     print("\\entry{%s}{\\textit{%s}}{}{%s \\\\ %s \smallvspace \\\\ \\textit{%s}}\n"
         % (
@@ -137,7 +138,7 @@ def write_other_exp(db):
 
 # End document
 def write_final():
-    print("\\end{document}")
+    print(r"\end{document}")
 
 ### ---- ###
 ### Main ###
@@ -145,7 +146,7 @@ def write_final():
 
 def main():
 
-    db = sqlite3.connect('/home/rutrum/db/work.db')
+    db = sqlite3.connect('/home/rutrum/Dropbox/work.db')
     db.row_factory = dict_factory
 
     write_preamble()
