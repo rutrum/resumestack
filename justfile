@@ -4,6 +4,9 @@ latex:
 md:
     python3 src/markdown_formatter.py
 
+watch pdf:
+    watchexec -- just pdf
+
 pdf:
     python3 src/latex_formatter.py > target/DavidPurdumResume.tex
     pdflatex -halt-on-error -output-directory target target/DavidPurdumResume.tex 
