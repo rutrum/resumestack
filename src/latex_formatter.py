@@ -1,5 +1,4 @@
 import model
-import datetime
 
 # Print the latex format of data to the console
 def format(data):
@@ -23,23 +22,6 @@ def write_header(title):
     print(r"\header{{{}}}".format(title))
     print()
 
-def list_skills(skills, width):
-    skillstr = ""
-    i = 0
-    for skill in skills:
-        skill["title"] = skill["title"].replace("#", r"\#")
-        if i == 0:
-            skillstr += "\\\\%s" % skill["title"]
-        else:
-            skillstr += " $\\cdot$ %s" % skill["title"]
-        i = (i + 1) % width
-    return skillstr[2:]
-
-def prettyDate(str):
-    if (str == None): return ""
-    date = datetime.datetime.strptime(str, "%Y-%m-%d")
-    return datetime.datetime.strftime(date, "%B %Y")
-
 def write_title(me):
     print(r"\bigtitle{{David Purdum}}{{ {} \\ {} \\ {} \\ {} }}".format(
         me["email"], 
@@ -58,7 +40,7 @@ def write_education(education):
         print(r"\entry{{{}}}{{{}}}{{{}}}{{{} \\ {}}}".format(
             edu["degree"],
             edu["institution"],
-            "Graduated " + prettyDate(edu["end"]),
+            "Graduated " + edu["pretty_date"],
             majors,
             minors
         ))
@@ -66,67 +48,36 @@ def write_education(education):
 def write_skills(skills):
     write_header("Skills")
 
-    for skill in skills:
-        skill["title"] = skill["title"].replace("#", r"\#")
+    # Change C# to C\#
+    for category in skills:
+        skills[category] = list(map(lambda skill: skill.replace("#", r"\#"), skills[category]))
 
-    proficient = list(map(
-        lambda skill: skill["title"], 
-        filter(
-            lambda skill: skill["type"] == "lang" and skill["proficiency"] == 2, 
-            skills
-        )
-    ))
-
-    familiar = list(map(
-        lambda skill: skill["title"], 
-        filter(
-            lambda skill: skill["type"] == "lang" and skill["proficiency"] == 1, 
-            skills
-        )
-    ))
-
-    software = list(map(
-        lambda skill: skill["title"], 
-        filter(
-            lambda skill: skill["type"] == "soft",
-            skills
-        )
-    ))
-
-    print(r"\simpleentry{{Proficient}}{{{}}}".format(r" $\cdot$ ".join(proficient)))
+    print(r"\simpleentry{{Proficient}}{{{}}}".format(
+        r" $\cdot$ ".join(skills["proficient"]))
+    )
     print()
-    print(r"\simpleentry{{Familiar}}{{{}}}".format(r" $\cdot$ ".join(familiar)))
+    print(r"\simpleentry{{Familiar}}{{{}}}".format(
+        r" $\cdot$ ".join(skills["familiar"]))
+    )
     print()
-    print(r"\simpleentry{{Technologies}}{{{}}}".format(r" $\cdot$ ".join(software)))
+    print(r"\simpleentry{{Technologies}}{{{}}}".format(
+        r" $\cdot$ ".join(skills["software"]))
+    )
     print()
-
-def time_period(start, end, days):
-    rawstart = datetime.datetime.strptime(start, "%Y-%m-%d")
-    start = datetime.datetime.strftime(rawstart, "%B %Y")
-
-    if end == None: 
-        end = "Present"
-    else:
-        rawend = datetime.datetime.strptime(end, "%Y-%m-%d")
-        end = datetime.datetime.strftime(rawend, "%B %Y")
-
-    if start == end:
-        return start
-    elif days and days < 100 and "May" in start and "August" in end:
-        return "Summer " + datetime.datetime.strftime(rawstart, "%Y")
-    else:
-        return r"\timeperiod{{{}}}{{{}}}".format(start, end)
-
-    return datetime.datetime.strftime(date, "%B %Y")
 
 def write_experience(experience):
     write_header("Experience")
 
     for exp in filter(lambda exp: exp["tag"] != "other", experience):
+        if len(exp["pretty_date"]) == 1:
+            time = exp["pretty_date"][0]
+        else:
+            time = r"\timeperiod{{{}}}{{{}}}".format(exp["pretty_date"][0], exp["pretty_date"][1])
+        
         print(r"\entry{{{}}}{{{}}}{{{}}}{{{}}}".format(
             exp["title"],
             exp["institution"],
-            time_period(exp["start"], exp["end"], exp["days"]),
+            time, 
             exp["description"].replace(" n ", " $n$ ")
         ))
         print()
@@ -144,3 +95,17 @@ def write_projects(projects):
 if __name__ == "__main__":
     data = model.ResumeData()
     format(data)
+
+'''
+def list_skills(skills, width):
+    skillstr = ""
+    i = 0
+    for skill in skills:
+        skill["title"] = skill["title"].replace("#", r"\#")
+        if i == 0:
+            skillstr += "\\\\%s" % skill["title"]
+        else:
+            skillstr += " $\\cdot$ %s" % skill["title"]
+        i = (i + 1) % width
+    return skillstr[2:]
+'''
