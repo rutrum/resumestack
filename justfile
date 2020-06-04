@@ -18,3 +18,4 @@ open pdf: pdf
 
 clean:
     trash target/*
+    trash src/__pycache__/
