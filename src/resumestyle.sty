@@ -2,6 +2,12 @@
 
 % Set page margins
 \usepackage[letterpaper, margin=3.5em]{geometry}
+\usepackage{geometry}
+\geometry{
+    letterpaper,
+    left=2em,
+    top=3.5em,
+}
 
 % Font family
 \usepackage{charter}
@@ -16,12 +22,12 @@
 \newcommand{\timeperiod}[2] {#1 \--- #2}
 
 % Definition for box widths
-\newcommand{\smallwidth} {12em}
+\newcommand{\smallwidth} {13em}
 \newcommand{\midwidth}   {14em}
 \newcommand{\bigwidth}   {32em}
 
 % Definitions for horizonal alignment
-\newcommand{\leftalignment} {\hspace{19em}}
+\newcommand{\leftalignment} {\hspace{20em}}
 \newcommand{\leftspace}     {\hspace{4em}}
 \newcommand{\middlespace}   {\hspace{2.8em}}
 
@@ -90,4 +96,12 @@
     \middlespace
     \parbox{\bigwidth}{#2}
     \smallervspace
+}
+
+\newcommand{\publication}[3] {
+    \leftspace
+    \parbox{\smallwidth}{\raggedleft\textit{#1}}
+    \middlespace
+    \parbox{\bigwidth}{``#2'' \\ #3}
+    \smallvspace
 }

@@ -15,11 +15,16 @@ class ResumeData:
         self.me = db.execute("SELECT * FROM Persons WHERE name='David Purdum'").fetchone()
         self.projects = db.execute("SELECT * FROM Projects").fetchall()
 
+        self.fetch_publications(db)
+        self.fetch_research(db)
         self.fetch_experience(db)
         self.fetch_presentations(db)
         self.fetch_education(db)
         self.fetch_skills(db)
         self.fetch_awards(db)
+
+    def fetch_publications(self, db):
+        self.publications = db.execute("SELECT * FROM Publications").fetchall()
 
     def fetch_awards(self, db):
         self.awards = db.execute("SELECT * FROM Awards ORDER BY date DESC").fetchall()
@@ -67,6 +72,26 @@ class ResumeData:
         for edu in self.education:
             date = datetime.datetime.strptime(edu["end"], "%Y-%m-%d")
             edu["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
+
+
+    def fetch_research(self, db):
+        self.research = db.execute("SELECT *, Persons.name FROM Research, Persons WHERE advisor_id = Persons.id").fetchall()
+
+        for res in self.research:
+            pretty_start = None
+            if res["start"]:
+                date = datetime.datetime.strptime(res["start"], "%Y-%m-%d")
+                pretty_start = datetime.datetime.strftime(date, "%B %Y")
+
+            pretty_end = "Present"
+            if res["end"]:
+                date = datetime.datetime.strptime(res["end"], "%Y-%m-%d")
+                pretty_end = datetime.datetime.strftime(date, "%B %Y")
+
+            if pretty_start == pretty_end:
+                exp["pretty_date"] = (pretty_start, )
+            else:
+                res["pretty_date"] = (pretty_start, pretty_end)
 
 
     def fetch_skills(self, db):

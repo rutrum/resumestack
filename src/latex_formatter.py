@@ -21,6 +21,33 @@ def write_awards(awards):
         print()
     print(r"\smallvspace")
 
+def write_publications(publications):
+    write_header("Publications")
+
+    for pub in publications:
+        print(r"\publication{{{}}}{{{}}}{{{}}}".format(
+            pub["date"] or "Work in Progress",
+            pub["title"],
+            pub["authors"]
+        ))
+
+def write_research(research):
+    write_header("Research")
+
+    for res in research:
+        if len(res["pretty_date"]) == 1:
+            time = res["pretty_date"][0]
+        else:
+            time = r"\timeperiod{{{}}}{{{}}}".format(res["pretty_date"][0], res["pretty_date"][1])
+        
+        print(r"\entry{{{}}}{{{}}}{{{}}}{{{}}}".format(
+            res["field"],
+            "",
+            time, 
+            res["description"].replace(" n ", " $n$ ")
+        ))
+        print()
+
 def write_presentations(presentations):
     write_header("Presentations")
 
@@ -68,10 +95,10 @@ def write_skills(skills):
     )
     print()
 
-def write_experience(experience):
+def write_experience(experience, tags=["research", "cs"]):
     write_header("Experience")
 
-    for exp in filter(lambda exp: exp["tag"] != "other", experience):
+    for exp in filter(lambda exp: exp["tag"] in tags, experience):
         if len(exp["pretty_date"]) == 1:
             time = exp["pretty_date"][0]
         else:
