@@ -1,23 +1,3 @@
-import model
-
-# Print the latex format of data to the console
-def format(data):
-    print(r"\documentclass{article}")
-    print(r"\usepackage{/home/rutrum/repo/resumestack/src/resumestyle}")
-    print(r"\begin{document}")
-    print()
-    write_title(data.me)
-    print()
-    write_experience(data.experience)
-    print()
-    write_skills(data.skills)
-    print()
-    write_projects(data.projects)
-    print()
-    write_education(data.education)
-    print()
-    print(r"\end{document}")
-
 def write_header(title):
     print(r"\header{{{}}}".format(title))
     print()
@@ -29,6 +9,29 @@ def write_title(me):
         me["github"], 
         me["linkedin"])
     )
+
+def write_awards(awards):
+    write_header("Awards and Recognition")
+
+    for award in awards:
+        print(r"\award{{{}}}{{{}}}".format(
+            award["pretty_date"],
+            award["name"]
+        ))
+        print()
+    print(r"\smallvspace")
+
+def write_presentations(presentations):
+    write_header("Presentations")
+
+    for pres in presentations:
+        print(r"\workentry{{{}}}{{{}}}{{{}}}{{{}}}".format(
+            pres["title"],
+            pres["type"].capitalize(),
+            pres["conference"], 
+            pres["pretty_date"]
+        ))
+        print()
 
 def write_education(education):
     write_header("Education")
@@ -91,10 +94,6 @@ def write_projects(projects):
             proj["description"]
         ))
         print()
-            
-if __name__ == "__main__":
-    data = model.ResumeData()
-    format(data)
 
 '''
 def list_skills(skills, width):

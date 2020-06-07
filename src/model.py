@@ -13,13 +13,31 @@ class ResumeData:
         db.row_factory = ResumeData.dict_factory
 
         self.me = db.execute("SELECT * FROM Persons WHERE name='David Purdum'").fetchone()
-        self.education = db.execute("SELECT * FROM Education").fetchall()
         self.projects = db.execute("SELECT * FROM Projects").fetchall()
-        self.experience = db.execute("SELECT *, julianday(end) - julianday(start) AS days FROM Experience ORDER BY start DESC").fetchall()
 
-        for edu in self.education:
-            date = datetime.datetime.strptime(edu["end"], "%Y-%m-%d")
-            edu["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
+        self.fetch_experience(db)
+        self.fetch_presentations(db)
+        self.fetch_education(db)
+        self.fetch_skills(db)
+        self.fetch_awards(db)
+
+    def fetch_awards(self, db):
+        self.awards = db.execute("SELECT * FROM Awards ORDER BY date DESC").fetchall()
+
+        for award in self.awards:
+            date = datetime.datetime.strptime(award["date"], "%Y-%m-%d")
+            award["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
+
+    def fetch_presentations(self, db):
+        self.presentations = db.execute("SELECT * FROM Presentations ORDER BY date DESC").fetchall()
+
+        for pres in self.presentations:
+            date = datetime.datetime.strptime(pres["date"], "%Y-%m-%d")
+            pres["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
+            pres["year"] = datetime.datetime.strftime(date, "%Y")
+
+    def fetch_experience(self, db):
+        self.experience = db.execute("SELECT *, julianday(end) - julianday(start) AS days FROM Experience ORDER BY start DESC").fetchall()
 
         # Add keys for formatted days.  Turn YYYY-MM-DD into Month YYYY.
         # Key pretty_date will be a tuple with one or two elements
@@ -42,7 +60,16 @@ class ResumeData:
             else:
                 exp["pretty_date"] = (pretty_start, pretty_end)
 
-        # Add key for skill lists
+    def fetch_education(self, db):
+        self.education = db.execute("SELECT * FROM Education").fetchall()
+
+        # Construct a formatted date for education: YYYY-MM-DD => Month YYYY
+        for edu in self.education:
+            date = datetime.datetime.strptime(edu["end"], "%Y-%m-%d")
+            edu["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
+
+
+    def fetch_skills(self, db):
         skills = db.execute("SELECT * FROM Skills ORDER BY weight DESC").fetchall()
 
         self.skills = {}

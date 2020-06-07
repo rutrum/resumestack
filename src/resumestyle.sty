@@ -27,6 +27,7 @@
 
 % Definitions for vertical spacing
 \newcommand{\smallvspace}  {\vspace{1em}}
+\newcommand{\smallervspace}  {\vspace{.3em}}
 \newcommand{\headervspace} {\vspace{1em}}
 
 % Special title block
@@ -71,4 +72,22 @@
     \middlespace
     \parbox[t]{\midwidth}{#2}
     \smallvspace
+}
+
+% Entry for publications, talks, posters, etc
+\newcommand{\workentry}[4] {
+    \leftspace
+    \parbox{\smallwidth}{\raggedleft\textit{#4 #2}}
+    \middlespace
+    \parbox{\bigwidth}{``#1'' \\ #3}
+    \smallvspace
+}
+
+% Award, one liner
+\newcommand{\award}[2] {
+    \leftspace
+    \parbox{\smallwidth}{\raggedleft\textit{#1}}
+    \middlespace
+    \parbox{\bigwidth}{#2}
+    \smallervspace
 }

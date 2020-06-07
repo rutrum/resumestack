@@ -1,16 +1,3 @@
-import model
-
-# Print the latex format of data to the console
-def format(data):
-    write_experience(data.experience)
-    print()
-    write_skills(data.skills)
-    print()
-    write_projects(data.projects)
-    print()
-    write_education(data.education)
-    print()
-
 def big_header(title):
     print("## {}".format(title))
     print()
@@ -58,7 +45,3 @@ def write_projects(projects):
         small_header(proj["title"])
         print(proj["description"])
         print()
-            
-if __name__ == "__main__":
-    data = model.ResumeData()
-    format(data)
