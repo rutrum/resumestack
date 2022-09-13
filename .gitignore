@@ -1,2 +1,4 @@
 target/
+records/
 src/__pycache__
+work.db

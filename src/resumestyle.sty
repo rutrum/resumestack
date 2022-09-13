@@ -12,6 +12,18 @@
 % Font family
 \usepackage{charter}
 
+% Hyperlinks
+\usepackage[colorlinks]{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=cyan,
+    urlcolor=cyan, 
+}
+\newcommand{\selflink}[1]{\href{#1}{\color{RoyalBlue} #1}}
+\newcommand{\link}[2]{\href{#1}{\color{RoyalBlue} #2}}
+
 % Remove page numbers
 \thispagestyle{empty}
 
@@ -98,10 +110,10 @@
     \smallervspace
 }
 
-\newcommand{\publication}[3] {
+\newcommand{\publication}[4] {
     \leftspace
     \parbox{\smallwidth}{\raggedleft\textit{#1}}
     \middlespace
-    \parbox{\bigwidth}{``#2'' \\ #3}
+    \parbox{\bigwidth}{\link{#3}{``#2''} \\ #4}
     \smallvspace
 }

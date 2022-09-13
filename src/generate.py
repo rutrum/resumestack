@@ -1,5 +1,6 @@
 import sys
 import latex_formatter as latex
+import txt_formatter as txt
 import markdown_formatter as md
 import model
 
@@ -14,8 +15,10 @@ def main():
         md_resume_format(data)
     elif markup == "latex" and doc_type == "resume":
         latex_resume_format(data)
-    elif markup == "md" and doc_type == "cv":
-        md_resume_format(data)
+    elif markup == "txt" and doc_type == "resume":
+        txt_resume_format(data)
+    #elif markup == "md" and doc_type == "cv":
+    #    md_resume_format(data)
     elif markup == "latex" and doc_type == "cv":
         latex_cv_format(data)
     else:
@@ -38,7 +41,7 @@ def latex_resume_format(data):
     print()
     latex.write_title(data.me)
     print()
-    latex.write_experience(data.experience)
+    latex.write_experience(data.experience, ["cs", "internship"])
     print()
     latex.write_skills(data.skills)
     print()
@@ -70,6 +73,15 @@ def latex_cv_format(data):
     latex.write_awards(data.awards)
     print()
     print(r"\end{document}")
+
+def txt_resume_format(data):
+    txt.write_title(data.me)
+    print()
+    txt.write_experience(data.experience)
+    print()
+    txt.write_education(data.education)
+    print()
+    txt.write_skills(data.skills)
 
 if __name__ == "__main__":
     main()

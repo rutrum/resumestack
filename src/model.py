@@ -9,11 +9,10 @@ class ResumeData:
         return d
 
     def __init__(self):
-        db = sqlite3.connect('/home/rutrum/Dropbox/work.db')
+        db = sqlite3.connect('work.db')
         db.row_factory = ResumeData.dict_factory
 
         self.me = db.execute("SELECT * FROM Persons WHERE name='David Purdum'").fetchone()
-        self.projects = db.execute("SELECT * FROM Projects").fetchall()
 
         self.fetch_publications(db)
         self.fetch_research(db)
@@ -22,9 +21,25 @@ class ResumeData:
         self.fetch_education(db)
         self.fetch_skills(db)
         self.fetch_awards(db)
+        self.fetch_projects(db)
+
+    def fetch_projects(self, db):
+        self.projects = db.execute("SELECT * FROM Projects WHERE show == True ORDER BY id DESC").fetchall()
+
+        for proj in self.projects:
+            if proj["url"]:
+                slashslash = proj["url"].find("//")
+                proj["pretty_url"] = proj["url"]
+                if slashslash != -1:
+                    proj["pretty_url"] = proj["url"][slashslash + 2:]
+
 
     def fetch_publications(self, db):
         self.publications = db.execute("SELECT * FROM Publications").fetchall()
+
+        for pub in self.publications:
+            date = datetime.datetime.strptime(pub["date"], "%Y-%m-%d")
+            pub["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
 
     def fetch_awards(self, db):
         self.awards = db.execute("SELECT * FROM Awards ORDER BY date DESC").fetchall()
@@ -57,6 +72,9 @@ class ResumeData:
                 date = datetime.datetime.strptime(exp["end"], "%Y-%m-%d")
                 pretty_end = datetime.datetime.strftime(date, "%B %Y")
 
+            exp["pretty_start"] = pretty_start
+            exp["pretty_end"] = pretty_end
+
             days = exp["days"]
             if pretty_start == pretty_end:
                 exp["pretty_date"] = (pretty_start, )
@@ -66,16 +84,19 @@ class ResumeData:
                 exp["pretty_date"] = (pretty_start, pretty_end)
 
     def fetch_education(self, db):
-        self.education = db.execute("SELECT * FROM Education").fetchall()
+        self.education = db.execute("SELECT * FROM Education ORDER BY start DESC").fetchall()
 
         # Construct a formatted date for education: YYYY-MM-DD => Month YYYY
         for edu in self.education:
+            date = datetime.datetime.strptime(edu["start"], "%Y-%m-%d")
+            edu["pretty_start"] = datetime.datetime.strftime(date, "%B %Y")
             date = datetime.datetime.strptime(edu["end"], "%Y-%m-%d")
+            edu["pretty_end"] = datetime.datetime.strftime(date, "%B %Y")
             edu["pretty_date"] = datetime.datetime.strftime(date, "%B %Y")
 
 
     def fetch_research(self, db):
-        self.research = db.execute("SELECT *, Persons.name FROM Research, Persons WHERE advisor_id = Persons.id").fetchall()
+        self.research = db.execute("SELECT *, Persons.name as advisor FROM Research, Persons WHERE advisor_id = Persons.id").fetchall()
 
         for res in self.research:
             pretty_start = None
@@ -89,7 +110,7 @@ class ResumeData:
                 pretty_end = datetime.datetime.strftime(date, "%B %Y")
 
             if pretty_start == pretty_end:
-                exp["pretty_date"] = (pretty_start, )
+                res["pretty_date"] = (pretty_start, )
             else:
                 res["pretty_date"] = (pretty_start, pretty_end)
 

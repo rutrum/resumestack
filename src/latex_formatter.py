@@ -3,12 +3,12 @@ def write_header(title):
     print()
 
 def write_title(me):
-    print(r"\bigtitle{{David Purdum}}{{ {} \\ {} \\ {} \\ {} }}".format(
+    print(r"\bigtitle{{David Purdum}}{{ {} \\ {} \\ \selflink{{{}}} \\ \selflink{{{}}} }}".format(
         me["email"], 
         me["cell"].replace("-", r"\,-\,").replace(")", r")\ "), 
+        me["website"],
         me["github"], 
-        me["linkedin"])
-    )
+    ))
 
 def write_awards(awards):
     write_header("Awards and Recognition")
@@ -25,10 +25,11 @@ def write_publications(publications):
     write_header("Publications")
 
     for pub in publications:
-        print(r"\publication{{{}}}{{{}}}{{{}}}".format(
-            pub["date"] or "Work in Progress",
+        print(r"\publication{{{}}}{{{}}}{{{}}}{{{}}}".format(
+            pub["pretty_date"] or "Work in Progress",
             pub["title"],
-            pub["authors"]
+            pub["publication"],
+            pub["authors"],
         ))
 
 def write_research(research):
@@ -39,11 +40,11 @@ def write_research(research):
             time = res["pretty_date"][0]
         else:
             time = r"\timeperiod{{{}}}{{{}}}".format(res["pretty_date"][0], res["pretty_date"][1])
-        
+
         print(r"\entry{{{}}}{{{}}}{{{}}}{{{}}}".format(
             res["field"],
-            "",
-            time, 
+            "with " + res["advisor"],
+            time,
             res["description"].replace(" n ", " $n$ ")
         ))
         print()
@@ -55,7 +56,7 @@ def write_presentations(presentations):
         print(r"\workentry{{{}}}{{{}}}{{{}}}{{{}}}".format(
             pres["title"],
             pres["type"].capitalize(),
-            pres["conference"], 
+            pres["conference"],
             pres["pretty_date"]
         ))
         print()
@@ -64,16 +65,25 @@ def write_education(education):
     write_header("Education")
     for edu in education:
 
-        majors = r" $\cdot$ ".join(list(map(lambda x: x.strip() + " Major", edu["majors"].split(","))))
-        minors = r" $\cdot$ ".join(list(map(lambda x: x.strip() + " Minor", edu["minors"].split(","))))
+        description = ""
+        if edu["majors"]:
+            majors = r" $\cdot$ ".join(list(map(lambda x: x.strip() + " Major", edu["majors"].split(","))))
+            if edu["minors"]:
+                minors = r" $\cdot$ ".join(list(map(lambda x: x.strip() + " Minor", edu["minors"].split(","))))
+                description = r"{} \\ {}".format(majors, minors)
+            else:
+                description = majors
+        elif edu["program"]:
+            description = edu["program"] + " Program"
 
-        print(r"\entry{{{}}}{{{}}}{{{}}}{{{} \\ {}}}".format(
+        print(r"\entry{{{}}}{{{}}}{{{}}}{{{}}}".format(
             edu["degree"],
             edu["institution"],
             "Graduated " + edu["pretty_date"],
-            majors,
-            minors
+            description
         ))
+
+        print()
 
 def write_skills(skills):
     write_header("Skills")
@@ -95,7 +105,7 @@ def write_skills(skills):
     )
     print()
 
-def write_experience(experience, tags=["research", "cs"]):
+def write_experience(experience, tags=["internship", "cs"]):
     write_header("Experience")
 
     for exp in filter(lambda exp: exp["tag"] in tags, experience):
@@ -103,11 +113,11 @@ def write_experience(experience, tags=["research", "cs"]):
             time = exp["pretty_date"][0]
         else:
             time = r"\timeperiod{{{}}}{{{}}}".format(exp["pretty_date"][0], exp["pretty_date"][1])
-        
+
         print(r"\entry{{{}}}{{{}}}{{{}}}{{{}}}".format(
             exp["title"],
             exp["institution"],
-            time, 
+            time,
             exp["description"].replace(" n ", " $n$ ")
         ))
         print()
@@ -116,10 +126,22 @@ def write_projects(projects):
     write_header("Projects")
 
     for proj in projects:
-        print(r"\simpleentry{{{}}}{{{}}}".format(
-            proj["title"],
-            proj["description"]
-        ))
+        if proj["url"]:
+            url = proj["url"].replace("_", "\\_")
+            pretty_url = proj["pretty_url"].replace("_", "\\_")
+
+            print(r"\entry{{{}}}{{{}}}{{\link{{{}}}{{{}}}}}{{{}}}".format(
+                proj["title"],
+                "",
+                url,
+                pretty_url,
+                proj["description"]
+            ))
+        else:
+            print(r"\simpleentry{{{}}}{{{}}}".format(
+                proj["title"],
+                proj["description"]
+            ))
         print()
 
 '''
