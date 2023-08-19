@@ -9,7 +9,7 @@ class ResumeData:
         return d
 
     def __init__(self):
-        db = sqlite3.connect('work.db')
+        db = sqlite3.connect('/mnt/barracuda/data/work.db')
         db.row_factory = ResumeData.dict_factory
 
         self.me = db.execute("SELECT * FROM Persons WHERE name='David Purdum'").fetchone()
@@ -57,7 +57,7 @@ class ResumeData:
             pres["year"] = datetime.datetime.strftime(date, "%Y")
 
     def fetch_experience(self, db):
-        self.experience = db.execute("SELECT *, julianday(end) - julianday(start) AS days FROM Experience ORDER BY start DESC").fetchall()
+        self.experience = db.execute("SELECT *, julianday(end) - julianday(start) AS days FROM Experience ORDER BY priority DESC, end DESC").fetchall()
 
         # Add keys for formatted days.  Turn YYYY-MM-DD into Month YYYY.
         # Key pretty_date will be a tuple with one or two elements
@@ -119,26 +119,26 @@ class ResumeData:
         skills = db.execute("SELECT * FROM Skills ORDER BY weight DESC").fetchall()
 
         self.skills = {}
-        self.skills["proficient"] = list(map(
-            lambda skill: skill["title"], 
+        self.skills["language"] = list(map(
+            lambda skill: skill["title"],
             filter(
-                lambda skill: skill["type"] == "lang" and skill["proficiency"] == 2, 
+                lambda skill: skill["class"] == "lang",
                 skills
             )
         ))
 
-        self.skills["familiar"] = list(map(
-            lambda skill: skill["title"], 
+        self.skills["library"] = list(map(
+            lambda skill: skill["title"],
             filter(
-                lambda skill: skill["type"] == "lang" and skill["proficiency"] == 1, 
+                lambda skill: skill["class"] == "lib",
                 skills
             )
         ))
 
         self.skills["software"] = list(map(
-            lambda skill: skill["title"], 
+            lambda skill: skill["title"],
             filter(
-                lambda skill: skill["type"] == "soft",
+                lambda skill: skill["class"] == "soft",
                 skills
             )
         ))

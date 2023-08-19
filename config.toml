@@ -1,0 +1,48 @@
+db = "/mnt/barracuda/data/work.db"
+
+outdir = "target"
+
+keywords = [
+  "machine learning",
+  "visuali",
+  "reporting",
+  "image processing",
+  "predict",
+  "structured",
+  "wrangling",
+  "feature engineering",
+  "pandas",
+  "numpy",
+  "sklearn",
+  "agile",
+  "classification",
+  "regression",
+  "clustering",
+  "AWS",
+  "python",
+  "sql",
+  "transfer",
+  "fine tuning",
+  "agile",
+  "selenium",
+  "rust",
+  "opencv",
+  "sql",
+  "git",
+  "linux",
+  "docker",
+  "javascript",
+  "outlier",
+  "correlation",
+  "jupyter",
+]
+
+[resume]
+latex = "david_purdum_resume.pdf"
+md = "david_purdum_resume.md"
+latex_ats = "david_purdum_resume_ats.pdf"
+txt = "david_purdum_resume.txt"
+txt_ats = "david_purdum_resume_ats.txt"
+
+[cv]
+latex = "david_purdum_cv.pdf"

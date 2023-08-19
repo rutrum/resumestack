@@ -23,6 +23,16 @@ pdf DOCTYPE="resume":
     @trash target/*.aux
     @trash target/*.out
 
+ats:
+    python3 src/generate.py latex resume_ats > target/david_purdum_resume_ats.tex
+    pdflatex -halt-on-error -output-directory target target/david_purdum_resume_ats.tex 
+    @trash target/*.log
+    @trash target/*.aux
+    @trash target/*.out
+
+keywords:
+    python3 src/keyword_count.py
+
 open DOCTYPE="resume":
     just pdf {{DOCTYPE}}
     zathura target/david_purdum_{{DOCTYPE}}.pdf &

@@ -17,6 +17,8 @@ def main():
         latex_resume_format(data)
     elif markup == "txt" and doc_type == "resume":
         txt_resume_format(data)
+    elif markup == "latex" and doc_type == "resume_ats":
+        ats_latex_resume_format(data)
     #elif markup == "md" and doc_type == "cv":
     #    md_resume_format(data)
     elif markup == "latex" and doc_type == "cv":
@@ -34,6 +36,23 @@ def md_resume_format(data):
     md.write_education(data.education)
     print()
 
+def ats_latex_resume_format(data):
+    print(r"\documentclass{article}")
+    print(r"\usepackage{/home/rutrum/repo/resumestack/src/atsstyle}")
+    print(r"\begin{document}")
+    print()
+    latex.write_title(data.me)
+    print()
+    latex.write_experience(data.experience)
+    print()
+    latex.write_projects(data.projects)
+    print()
+    latex.write_skills(data.skills)
+    print()
+    latex.write_education(data.education)
+    print()
+    print(r"\end{document}")
+
 def latex_resume_format(data):
     print(r"\documentclass{article}")
     print(r"\usepackage{/home/rutrum/repo/resumestack/src/resumestyle}")
@@ -41,11 +60,11 @@ def latex_resume_format(data):
     print()
     latex.write_title(data.me)
     print()
-    latex.write_experience(data.experience, ["cs", "internship"])
-    print()
-    latex.write_skills(data.skills)
+    latex.write_experience(data.experience)
     print()
     latex.write_projects(data.projects)
+    print()
+    latex.write_skills(data.skills)
     print()
     latex.write_education(data.education)
     print()
@@ -64,7 +83,7 @@ def latex_cv_format(data):
     print()
     latex.write_publications(data.publications)
     print()
-    latex.write_experience(data.experience, ["cs"])
+    latex.write_experience(data.experience)
     print()
     latex.write_presentations(data.presentations)
     print()
@@ -79,9 +98,11 @@ def txt_resume_format(data):
     print()
     txt.write_experience(data.experience)
     print()
-    txt.write_education(data.education)
-    print()
     txt.write_skills(data.skills)
+    print()
+    txt.write_projects(data.projects)
+    print()
+    txt.write_education(data.education)
 
 if __name__ == "__main__":
     main()
